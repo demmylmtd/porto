@@ -21,34 +21,17 @@ export default function Footer() {
 
   return (
     <footer
-      style={{
-        borderTop: '1px solid var(--border)',
-        padding: 'clamp(2rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem)',
-        textAlign: 'center',
-        background: 'var(--bg-card)',
-      }}
+      className="border-t text-center px-[clamp(1rem,4vw,2rem)] py-[clamp(2rem,5vw,3rem)]"
+      style={{ borderColor: 'var(--border)', background: 'var(--bg-card)' }}
     >
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div className="mx-auto max-w-[1200px]">
         <p
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.75rem',
-            color: 'var(--text-subtle)',
-            letterSpacing: '0.06em',
-            textTransform: 'uppercase',
-          }}
+          className="uppercase tracking-[0.06em]"
+          style={{ fontSize: '0.75rem', color: 'var(--text-subtle)', fontFamily: 'var(--font-mono)' }}
         >
           © {new Date().getFullYear()} {siteConfig.fullName} · {content.ui.builtWith}
         </p>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '1.5rem',
-            marginTop: '1rem',
-            flexWrap: 'wrap',
-          }}
-        >
+        <div className="mt-4 flex flex-wrap justify-center gap-6">
           {(Object.entries(siteConfig.socials) as Array<[SocialPlatform, string]>).map(([key, url]) => (
             <FooterLink key={key} href={url} icon={<SocialIcon platform={key} size={14} />}>
               {socialLabels[key]}
