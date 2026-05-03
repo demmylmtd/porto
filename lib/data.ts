@@ -1,11 +1,11 @@
 export const siteConfig = {
   name: 'Demmy',
-  fullName: 'Demmy',
-  title: 'Economics & Finance',
-  tagline: 'BBA Economics & Management · Islamic Finance · Equity Research',
+  fullName: 'Muhammad Demmy',
+  title: 'GCC Equity Research',
+  tagline: 'GCC Equity Research · Islamic Finance · Tadawul Coverage · EN/AR',
   description:
-    'Finance analyst in training with a passion for Islamic finance, equity research, and algorithmic trading. Building DemmyFi — a finance education brand for Indonesia.',
-  location: 'Jakarta, Indonesia',
+    'Saudi-scholarship BBA candidate at LIPIA Jakarta (IMAMU Riyadh, coursework in Arabic). Bloomberg BMC + Bloomberg MISK certified. Building sell-side coverage on Tadawul names — Aramco, Al Rajhi, SABIC — with bilingual EN/AR research.',
+  location: 'Jakarta, Indonesia · Riyadh-affiliated',
   email: 'muhammaddemmy72@gmail.com',
   socials: {
     linkedin: 'https://www.linkedin.com/in/muhammad-demmy/',
