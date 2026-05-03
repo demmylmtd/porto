@@ -1,31 +1,83 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
+
+/**
+ * Hover styles applied via the `.hov-card` and `.hov-btn` classes below.
+ * One stylesheet, no per-instance React state.
+ */
+function HoverStyles() {
+  return (
+    <style jsx global>{`
+      .hov-card {
+        border-color: var(--border);
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hov-card:hover {
+        border-color: var(--brand);
+        box-shadow: 0 4px 12px var(--brand-soft);
+      }
+      .hov-solid {
+        background: var(--brand);
+        color: #ffffff;
+        box-shadow: var(--shadow-soft);
+        transition: opacity 0.2s, box-shadow 0.2s;
+      }
+      .hov-solid:hover {
+        opacity: 0.9;
+        box-shadow: 0 4px 12px var(--brand-soft);
+      }
+      .hov-outline {
+        background: var(--bg);
+        color: var(--brand);
+        border: 1.5px solid var(--brand);
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .hov-outline:hover {
+        background: var(--brand);
+        color: #ffffff;
+      }
+      .hov-text {
+        color: var(--text-muted);
+        transition: color 0.2s;
+      }
+      .hov-text:hover {
+        color: var(--brand);
+      }
+      .hov-subtle {
+        color: var(--text-subtle);
+        transition: color 0.2s;
+      }
+      .hov-subtle:hover {
+        color: var(--brand);
+      }
+    `}</style>
+  )
+}
+
+const monoUpper: CSSProperties = {
+  fontFamily: 'var(--font-mono)',
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  textDecoration: 'none',
+}
 
 // Hoverable card (div)
 export function HoverCard({
   children,
   style,
 }: {
-  children: React.ReactNode
-  style?: React.CSSProperties
+  children: ReactNode
+  style?: CSSProperties
 }) {
-  const [hovered, setHovered] = useState(false)
   return (
-    <div
-      className="finance-card"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        ...style,
-        borderColor: hovered ? 'var(--brand)' : 'var(--border)',
-        boxShadow: hovered ? '0 4px 12px var(--brand-soft)' : 'none',
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-      }}
-    >
-      {children}
-    </div>
+    <>
+      <HoverStyles />
+      <div className="finance-card hov-card" style={style}>
+        {children}
+      </div>
+    </>
   )
 }
 
@@ -35,210 +87,147 @@ export function HoverCardLink({
   href,
   style,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   href: string
-  style?: React.CSSProperties
+  style?: CSSProperties
 }) {
-  const [hovered, setHovered] = useState(false)
   const isExternal = href.startsWith('http')
   return (
-    <a
-      href={href}
-      target={isExternal ? '_blank' : '_self'}
-      rel={isExternal ? 'noopener noreferrer' : undefined}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="finance-card"
-      style={{
-        ...style,
-        textDecoration: 'none',
-        display: 'block',
-        borderColor: hovered ? 'var(--brand)' : 'var(--border)',
-        boxShadow: hovered ? '0 4px 12px var(--brand-soft)' : 'none',
-        transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
-      }}
-    >
-      {children}
-    </a>
+    <>
+      <HoverStyles />
+      <a
+        href={href}
+        target={isExternal ? '_blank' : '_self'}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
+        className="finance-card hov-card"
+        style={{ textDecoration: 'none', display: 'block', ...style }}
+      >
+        {children}
+      </a>
+    </>
   )
 }
 
 // Gold primary button (Link)
-export function GoldButton({
-  href,
-  children,
-}: {
-  href: string
-  children: React.ReactNode
-}) {
-  const [hovered, setHovered] = useState(false)
+export function GoldButton({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link
-      href={href}
-      className="cta-button"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'inline-block',
-        padding: '0.85rem 2rem',
-        background: 'var(--brand)',
-        color: '#ffffff',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.78rem',
-        fontWeight: 600,
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase' as const,
-        textDecoration: 'none',
-        borderRadius: '6px',
-        opacity: hovered ? 0.9 : 1,
-        boxShadow: hovered ? '0 4px 12px var(--brand-soft)' : 'var(--shadow-soft)',
-        transition: 'opacity 0.2s, box-shadow 0.2s',
-      }}
-    >
-      {children}
-    </Link>
+    <>
+      <HoverStyles />
+      <Link
+        href={href}
+        className="cta-button hov-solid"
+        style={{
+          ...monoUpper,
+          display: 'inline-block',
+          padding: '0.85rem 2rem',
+          fontSize: '0.78rem',
+          fontWeight: 600,
+          borderRadius: '6px',
+        }}
+      >
+        {children}
+      </Link>
+    </>
   )
 }
 
 // Outline button (Link)
-export function OutlineButton({
-  href,
-  children,
-}: {
-  href: string
-  children: React.ReactNode
-}) {
-  const [hovered, setHovered] = useState(false)
+export function OutlineButton({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link
-      href={href}
-      className="cta-button"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'inline-block',
-        padding: '0.85rem 2rem',
-        background: 'var(--bg)',
-        color: hovered ? '#ffffff' : 'var(--brand)',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.78rem',
-        fontWeight: 600,
-        letterSpacing: '0.1em',
-        textTransform: 'uppercase' as const,
-        textDecoration: 'none',
-        border: `1.5px solid var(--brand)`,
-        borderRadius: '6px',
-        transition: 'background-color 0.2s, color 0.2s',
-        backgroundColor: hovered ? 'var(--brand)' : 'var(--bg)',
-      }}
-    >
-      {children}
-    </Link>
+    <>
+      <HoverStyles />
+      <Link
+        href={href}
+        className="cta-button hov-outline"
+        style={{
+          ...monoUpper,
+          display: 'inline-block',
+          padding: '0.85rem 2rem',
+          fontSize: '0.78rem',
+          fontWeight: 600,
+          borderRadius: '6px',
+        }}
+      >
+        {children}
+      </Link>
+    </>
   )
 }
 
 // Nav link with hover
-export function NavLink({
-  href,
-  children,
-}: {
-  href: string
-  children: React.ReactNode
-}) {
-  const [hovered, setHovered] = useState(false)
+export function NavLink({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <Link
-      href={href}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.78rem',
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase' as const,
-        color: hovered ? 'var(--brand)' : 'var(--text-muted)',
-        textDecoration: 'none',
-        transition: 'color 0.2s',
-      }}
-    >
-      {children}
-    </Link>
+    <>
+      <HoverStyles />
+      <Link
+        href={href}
+        className="hov-text"
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.78rem',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          textDecoration: 'none',
+        }}
+      >
+        {children}
+      </Link>
+    </>
   )
 }
 
 // Gold outline anchor (external)
-export function OutlineAnchor({
-  href,
-  children,
-}: {
-  href: string
-  children: React.ReactNode
-}) {
-  const [hovered, setHovered] = useState(false)
+export function OutlineAnchor({ href, children }: { href: string; children: ReactNode }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="cta-button"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.75rem',
-        textDecoration: 'none',
-        letterSpacing: '0.08em',
-        textTransform: 'uppercase' as const,
-        border: `1.5px solid var(--brand)`,
-        padding: '0.6rem 1.5rem',
-        borderRadius: '6px',
-        display: 'inline-block',
-        transition: 'background-color 0.2s, color 0.2s',
-        backgroundColor: hovered ? 'var(--brand)' : 'var(--bg)',
-        color: hovered ? '#ffffff' : 'var(--brand)',
-      }}
-    >
-      {children}
-    </a>
+    <>
+      <HoverStyles />
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="cta-button hov-outline"
+        style={{
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.75rem',
+          textDecoration: 'none',
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          padding: '0.6rem 1.5rem',
+          borderRadius: '6px',
+          display: 'inline-block',
+        }}
+      >
+        {children}
+      </a>
+    </>
   )
 }
 
 // Email gold button
-export function EmailButton({
-  email,
-  children,
-}: {
-  email: string
-  children: React.ReactNode
-}) {
-  const [hovered, setHovered] = useState(false)
+export function EmailButton({ email, children }: { email: string; children: ReactNode }) {
   return (
-    <a
-      href={`mailto:${email}`}
-      className="cta-button"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        padding: '1rem 2rem',
-        background: 'var(--brand)',
-        color: '#ffffff',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.85rem',
-        fontWeight: 600,
-        letterSpacing: '0.06em',
-        textDecoration: 'none',
-        borderRadius: '6px',
-        marginBottom: '3rem',
-        opacity: hovered ? 0.9 : 1,
-        boxShadow: hovered ? '0 4px 12px var(--brand-soft)' : 'var(--shadow-soft)',
-        transition: 'opacity 0.2s, box-shadow 0.2s',
-      }}
-    >
-      {children}
-    </a>
+    <>
+      <HoverStyles />
+      <a
+        href={`mailto:${email}`}
+        className="cta-button hov-solid"
+        style={{
+          fontFamily: 'var(--font-mono)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          padding: '1rem 2rem',
+          fontSize: '0.85rem',
+          fontWeight: 600,
+          letterSpacing: '0.06em',
+          textDecoration: 'none',
+          borderRadius: '6px',
+          marginBottom: '3rem',
+        }}
+      >
+        {children}
+      </a>
+    </>
   )
 }
 
@@ -249,32 +238,31 @@ export function FooterLink({
   icon,
 }: {
   href: string
-  children: React.ReactNode
-  icon?: React.ReactNode
+  children: ReactNode
+  icon?: ReactNode
 }) {
-  const [hovered, setHovered] = useState(false)
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '0.35rem',
-        fontFamily: 'var(--font-mono)',
-        fontSize: '0.72rem',
-        color: hovered ? 'var(--brand)' : 'var(--text-subtle)',
-        textDecoration: 'none',
-        textTransform: 'uppercase' as const,
-        letterSpacing: '0.06em',
-        transition: 'color 0.2s',
-      }}
-    >
-      {icon}
-      {children}
-    </a>
+    <>
+      <HoverStyles />
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hov-subtle"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.35rem',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '0.72rem',
+          textDecoration: 'none',
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+        }}
+      >
+        {icon}
+        {children}
+      </a>
+    </>
   )
 }
