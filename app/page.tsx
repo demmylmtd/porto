@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { GoldButton, HoverCard, HoverCardLink, OutlineAnchor, OutlineButton } from '@/components/Interactive'
+import CoverageSection from '@/components/CoverageSection'
 import { useAppSettings, useLocaleContent } from '@/components/AppSettingsProvider'
 import SocialIcon, { type SocialPlatform } from '@/components/SocialIcon'
 import { Locale } from '@/lib/content'
@@ -408,7 +409,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* COVERAGE — Phase 3.5 placeholder; will host Selected Coverage */}
+      {/* SELECTED COVERAGE */}
+      <CoverageSection />
 
       {/* CERTIFICATIONS */}
       <section id="certifications" className="onepage-section section-alt">
