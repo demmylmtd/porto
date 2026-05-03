@@ -9,36 +9,36 @@
   --font-body: 'Source Sans 3', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
-  --bg: #f6f6f4;
-  --bg-muted: #eceae3;
+  --bg: #f6f4ee;
+  --bg-muted: #ede9dd;
   --bg-card: #ffffff;
-  --bg-card-2: #f3f1eb;
-  --text-primary: #20242d;
-  --text-secondary: #2d3441;
-  --text-muted: #5f6778;
-  --text-subtle: #7f8796;
-  --border: rgba(21, 29, 45, 0.14);
-  --brand: #9d7a2b;
-  --brand-soft: rgba(157, 122, 43, 0.18);
-  --shadow-soft: 0 10px 24px rgba(20, 23, 33, 0.07);
-  --hero-gradient: radial-gradient(circle at 8% 12%, rgba(157, 122, 43, 0.16), transparent 38%), radial-gradient(circle at 84% 12%, rgba(50, 70, 102, 0.14), transparent 30%), #f6f6f4;
+  --bg-card-2: #f1ede0;
+  --text-primary: #0a1628;
+  --text-secondary: #142036;
+  --text-muted: #4b5870;
+  --text-subtle: #6e7891;
+  --border: rgba(10, 22, 40, 0.12);
+  --brand: #a88a35;
+  --brand-soft: rgba(168, 138, 53, 0.18);
+  --shadow-soft: 0 10px 24px rgba(10, 22, 40, 0.08);
+  --hero-gradient: radial-gradient(circle at 8% 12%, rgba(168, 138, 53, 0.16), transparent 38%), radial-gradient(circle at 84% 12%, rgba(31, 54, 97, 0.14), transparent 30%), #f6f4ee;
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #090f16;
-  --bg-muted: #0f1723;
-  --bg-card: #121c2a;
-  --bg-card-2: #0e1824;
+  --bg: #0a1628;
+  --bg-muted: #0d1a2e;
+  --bg-card: #0d0d0d;
+  --bg-card-2: #111b30;
   --text-primary: #f6f3eb;
   --text-secondary: #d7ddeb;
   --text-muted: #a4b0c3;
   --text-subtle: #7f8ba2;
-  --border: rgba(138, 156, 186, 0.26);
-  --brand: #d6b16b;
-  --brand-soft: rgba(214, 177, 107, 0.24);
-  --shadow-soft: 0 14px 34px rgba(2, 6, 12, 0.48);
-  --hero-gradient: radial-gradient(circle at 8% 12%, rgba(214, 177, 107, 0.18), transparent 38%), radial-gradient(circle at 84% 12%, rgba(77, 110, 160, 0.2), transparent 30%), #090f16;
+  --border: rgba(201, 168, 76, 0.20);
+  --brand: #c9a84c;
+  --brand-soft: rgba(201, 168, 76, 0.22);
+  --shadow-soft: 0 14px 34px rgba(2, 6, 12, 0.55);
+  --hero-gradient: radial-gradient(circle at 8% 12%, rgba(201, 168, 76, 0.18), transparent 38%), radial-gradient(circle at 84% 12%, rgba(43, 72, 128, 0.22), transparent 30%), #0a1628;
   color-scheme: dark;
 }
 
@@ -149,7 +149,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 50% -15%, rgba(214, 177, 107, 0.09), transparent 45%);
+  background-image: radial-gradient(circle at 50% -15%, rgba(201, 168, 76, 0.09), transparent 45%);
   pointer-events: none;
 }
 
@@ -169,7 +169,7 @@ body {
   width: 360px;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(214, 177, 107, 0.18) 0%, rgba(214, 177, 107, 0) 68%);
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.18) 0%, rgba(201, 168, 76, 0) 68%);
   pointer-events: none;
 }
 
