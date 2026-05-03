@@ -49,21 +49,12 @@ export const metadata: Metadata = {
     siteName: `${siteConfig.fullName} — DemmyFi`,
     title: titleDefault,
     description: heroline,
-    images: [
-      {
-        url: '/og.png',
-        width: 1200,
-        height: 630,
-        alt: `${siteConfig.fullName} — Equity Research · Saudi & GCC Markets`,
-      },
-    ],
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: titleDefault,
     description: heroline,
-    images: ['/og.png'],
   },
   robots: {
     index: true,
@@ -131,7 +122,8 @@ const personJsonLd = {
 
 const noFoucScript = `(function(){try{
 var t=localStorage.getItem('portfolio-theme-mode')||'dark';
-var l=localStorage.getItem('portfolio-locale')||'en';
+var l=localStorage.getItem('portfolio-locale');
+if(!l){var m=document.cookie.match(/(?:^|; )portfolio-locale-hint=([^;]+)/);l=m?decodeURIComponent(m[1]):'en';}
 var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;
 var d=document.documentElement;
 d.setAttribute('data-theme',r);
