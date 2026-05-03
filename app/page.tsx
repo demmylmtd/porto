@@ -21,6 +21,12 @@ const partnerBrands = [
   { name: 'SIDF', file: 'SIDF.svg', scale: 0.9 },
 ] as const
 
+const cvLabelByLocale: Record<Locale, string> = {
+  en: 'Download CV',
+  id: 'Unduh CV',
+  ar: 'تحميل السيرة الذاتية',
+}
+
 const socialItems: Array<{ platform: SocialPlatform; label: string; href: string; helper: string }> = [
   {
     platform: 'linkedin',
@@ -344,6 +350,7 @@ export default function HomePage() {
 
   return (
     <div className="finance-page-wrap">
+      {/* HERO */}
       <section id="home" className="onepage-section hero-section">
         <div className="hero-grid">
           <div>
@@ -356,8 +363,8 @@ export default function HomePage() {
 
             <div className="hero-actions">
               <GoldButton href="/#contact">{content.home.getInTouch}</GoldButton>
+              <OutlineAnchor href="/Demmy-CV.pdf">{cvLabelByLocale[locale]}</OutlineAnchor>
               <OutlineButton href="/#projects">{content.home.viewProjects}</OutlineButton>
-              <OutlineButton href="/proof-of-impact">Proof of Impact</OutlineButton>
             </div>
 
             <div className="hero-extras">
@@ -390,6 +397,7 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* CREDIBILITY STRIP */}
         <div className="brand-strip-wrap">
           <p className="strip-label">Trusted Programs & Institutions</p>
           <div className="brand-strip">
@@ -400,6 +408,138 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* COVERAGE — Phase 3.5 placeholder; will host Selected Coverage */}
+
+      {/* CERTIFICATIONS */}
+      <section id="certifications" className="onepage-section section-alt">
+        <div className="section-head">
+          <p className="eyebrow">{content.certificationsPage.eyebrow}</p>
+          <h2 className="section-title">{content.certificationsPage.title}</h2>
+        </div>
+
+        <div className="stack-grid cert-grid">
+          {content.certifications.slice(0, 6).map((cert) => (
+            <HoverCardLink
+              key={cert.name}
+              href={`/certificates/${encodeURIComponent(cert.fileName)}`}
+              style={{ padding: '1.4rem', background: 'var(--bg-card-2)' }}
+            >
+              <div className="card-topline">
+                <h3 className="card-title">{cert.name}</h3>
+                <span className="mono-small">{cert.year}</span>
+              </div>
+              <p className="card-company">{cert.issuer}</p>
+              <p className="card-copy">{cert.description}</p>
+              <span className="mono-small" style={{ color: 'var(--brand)' }}>
+                Open Certificate →
+              </span>
+            </HoverCardLink>
+          ))}
+        </div>
+      </section>
+
+      {/* EXPERIENCE */}
+      <section id="experience" className="onepage-section">
+        <div className="section-head">
+          <p className="eyebrow">{content.experiencePage.eyebrow}</p>
+          <h2 className="section-title">{content.home.experienceSection}</h2>
+        </div>
+
+        <div className="stack-grid">
+          {content.experiences.map((exp) => (
+            <HoverCard key={exp.company + exp.role} style={{ padding: '1.4rem' }}>
+              <div className="card-topline">
+                <h3 className="card-title">{exp.role}</h3>
+                <span className="mono-small">{exp.period}</span>
+              </div>
+              <p className="card-company">{exp.company}</p>
+              <p className="card-copy">{exp.description}</p>
+              <div className="chip-list">
+                {exp.tags.map((tag) => (
+                  <span key={tag} className="tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </HoverCard>
+          ))}
+        </div>
+      </section>
+
+      {/* PROJECTS — trading bots stay visible per user decision */}
+      <section id="projects" className="onepage-section section-alt">
+        <div className="section-head">
+          <p className="eyebrow">{content.projectsPage.eyebrow}</p>
+          <h2 className="section-title">{content.projectsPage.title}</h2>
+        </div>
+
+        <div className="projects-grid">
+          {content.projects.map((project) => (
+            <HoverCardLink key={project.title} href={project.link} style={{ padding: '1.3rem' }}>
+              <div className="card-topline">
+                <h3 className="card-title">{project.title}</h3>
+                <span
+                  className="mono-small"
+                  style={{
+                    color: statusStyles[project.status].color,
+                    border: `1px solid ${statusStyles[project.status].border}`,
+                    borderRadius: '999px',
+                    padding: '0.1rem 0.5rem',
+                  }}
+                >
+                  {project.statusLabel}
+                </span>
+              </div>
+              <p className="card-copy">{project.description}</p>
+              <div className="chip-list">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </HoverCardLink>
+          ))}
+        </div>
+      </section>
+
+      {/* CASE STUDIES */}
+      <section id="case-studies" className="onepage-section">
+        <div className="section-head">
+          <p className="eyebrow">{caseStudySection.eyebrow}</p>
+          <h2 className="section-title">{caseStudySection.title}</h2>
+          <p className="hero-copy" style={{ marginTop: '0.7rem', maxWidth: '72ch' }}>
+            {caseStudySection.description}
+          </p>
+        </div>
+
+        <div className="case-highlight-grid">
+          {caseStudySection.highlights.map((study) => (
+            <HoverCard key={study.title} style={{ overflow: 'hidden', padding: 0 }}>
+              <div className="case-image-wrap">
+                <Image src={study.image} alt={study.title} width={1834} height={1024} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+              <div className="case-body">
+                <p className="mono-small" style={{ color: 'var(--brand)' }}>
+                  {study.company}
+                </p>
+                <h3 className="card-title" style={{ marginTop: '0.35rem', fontSize: '1.15rem' }}>
+                  {study.title}
+                </h3>
+                <p className="card-copy" style={{ marginTop: '0.6rem' }}>
+                  {study.summary}
+                </p>
+              </div>
+            </HoverCard>
+          ))}
+        </div>
+
+        <div style={{ marginTop: '1rem' }}>
+          <OutlineButton href="/case-studies">{caseStudySection.openFullLabel}</OutlineButton>
+        </div>
+      </section>
+
+      {/* PROOF OF IMPACT */}
       <section id="proof-of-impact" className="onepage-section section-alt proof-impact-section">
         <div className="impact-spotlight">
           <p className="impact-spotlight-label">{proofImpactSection.spotlightLabel}</p>
@@ -444,7 +584,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="about" className="onepage-section">
+      {/* BLOG */}
+      <section id="blog" className="onepage-section">
+        <div className="section-head">
+          <p className="eyebrow">{content.blogPage.eyebrow}</p>
+          <h2 className="section-title">{content.blogPage.title}</h2>
+        </div>
+
+        <div className="stack-grid">
+          {content.blogPosts.slice(0, 2).map((post) => (
+            <HoverCardLink key={post.title} href={post.link} style={{ padding: '1.35rem', background: 'var(--bg-card-2)' }}>
+              <div className="card-topline">
+                <h3 className="card-title">{post.title}</h3>
+                <span className="mono-small">{post.date}</span>
+              </div>
+              <p className="card-copy">{post.excerpt}</p>
+              <span className="mono-small" style={{ color: 'var(--brand)' }}>
+                Read Article →
+              </span>
+            </HoverCardLink>
+          ))}
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section id="about" className="onepage-section section-alt">
         <div className="section-head">
           <p className="eyebrow">{content.about.eyebrow}</p>
           <h2 className="section-title">{content.about.title}</h2>
@@ -469,154 +633,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="experience" className="onepage-section section-alt">
-        <div className="section-head">
-          <p className="eyebrow">{content.experiencePage.eyebrow}</p>
-          <h2 className="section-title">{content.home.experienceSection}</h2>
-        </div>
-
-        <div className="stack-grid">
-          {content.experiences.map((exp) => (
-            <HoverCard key={exp.company + exp.role} style={{ padding: '1.4rem' }}>
-              <div className="card-topline">
-                <h3 className="card-title">{exp.role}</h3>
-                <span className="mono-small">{exp.period}</span>
-              </div>
-              <p className="card-company">{exp.company}</p>
-              <p className="card-copy">{exp.description}</p>
-              <div className="chip-list">
-                {exp.tags.map((tag) => (
-                  <span key={tag} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </HoverCard>
-          ))}
-        </div>
-      </section>
-
-      <section id="certifications" className="onepage-section">
-        <div className="section-head">
-          <p className="eyebrow">{content.certificationsPage.eyebrow}</p>
-          <h2 className="section-title">{content.certificationsPage.title}</h2>
-        </div>
-
-        <div className="stack-grid cert-grid">
-          {content.certifications.slice(0, 6).map((cert) => (
-            <HoverCardLink
-              key={cert.name}
-              href={`/certificates/${encodeURIComponent(cert.fileName)}`}
-              style={{ padding: '1.4rem', background: 'var(--bg-card-2)' }}
-            >
-              <div className="card-topline">
-                <h3 className="card-title">{cert.name}</h3>
-                <span className="mono-small">{cert.year}</span>
-              </div>
-              <p className="card-company">{cert.issuer}</p>
-              <p className="card-copy">{cert.description}</p>
-              <span className="mono-small" style={{ color: 'var(--brand)' }}>
-                Open Certificate →
-              </span>
-            </HoverCardLink>
-          ))}
-        </div>
-      </section>
-
-      <section id="projects" className="onepage-section section-alt">
-        <div className="section-head">
-          <p className="eyebrow">{content.projectsPage.eyebrow}</p>
-          <h2 className="section-title">{content.projectsPage.title}</h2>
-        </div>
-
-        <div className="projects-grid">
-          {content.projects.map((project) => (
-            <HoverCardLink key={project.title} href={project.link} style={{ padding: '1.3rem' }}>
-              <div className="card-topline">
-                <h3 className="card-title">{project.title}</h3>
-                <span
-                  className="mono-small"
-                  style={{
-                    color: statusStyles[project.status].color,
-                    border: `1px solid ${statusStyles[project.status].border}`,
-                    borderRadius: '999px',
-                    padding: '0.1rem 0.5rem',
-                  }}
-                >
-                  {project.statusLabel}
-                </span>
-              </div>
-              <p className="card-copy">{project.description}</p>
-              <div className="chip-list">
-                {project.tags.map((tag) => (
-                  <span key={tag} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </HoverCardLink>
-          ))}
-        </div>
-      </section>
-
-      <section id="case-studies" className="onepage-section">
-        <div className="section-head">
-          <p className="eyebrow">{caseStudySection.eyebrow}</p>
-          <h2 className="section-title">{caseStudySection.title}</h2>
-          <p className="hero-copy" style={{ marginTop: '0.7rem', maxWidth: '72ch' }}>
-            {caseStudySection.description}
-          </p>
-        </div>
-
-        <div className="case-highlight-grid">
-          {caseStudySection.highlights.map((study) => (
-            <HoverCard key={study.title} style={{ overflow: 'hidden', padding: 0 }}>
-              <div className="case-image-wrap">
-                <Image src={study.image} alt={study.title} width={1834} height={1024} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-              <div className="case-body">
-                <p className="mono-small" style={{ color: 'var(--brand)' }}>
-                  {study.company}
-                </p>
-                <h3 className="card-title" style={{ marginTop: '0.35rem', fontSize: '1.15rem' }}>
-                  {study.title}
-                </h3>
-                <p className="card-copy" style={{ marginTop: '0.6rem' }}>
-                  {study.summary}
-                </p>
-              </div>
-            </HoverCard>
-          ))}
-        </div>
-
-        <div style={{ marginTop: '1rem' }}>
-          <OutlineButton href="/case-studies">{caseStudySection.openFullLabel}</OutlineButton>
-        </div>
-      </section>
-
-      <section id="blog" className="onepage-section">
-        <div className="section-head">
-          <p className="eyebrow">{content.blogPage.eyebrow}</p>
-          <h2 className="section-title">{content.blogPage.title}</h2>
-        </div>
-
-        <div className="stack-grid">
-          {content.blogPosts.slice(0, 2).map((post) => (
-            <HoverCardLink key={post.title} href={post.link} style={{ padding: '1.35rem', background: 'var(--bg-card-2)' }}>
-              <div className="card-topline">
-                <h3 className="card-title">{post.title}</h3>
-                <span className="mono-small">{post.date}</span>
-              </div>
-              <p className="card-copy">{post.excerpt}</p>
-              <span className="mono-small" style={{ color: 'var(--brand)' }}>
-                Read Article →
-              </span>
-            </HoverCardLink>
-          ))}
-        </div>
-      </section>
-
-      <section id="contact" className="onepage-section section-alt">
+      {/* CONTACT */}
+      <section id="contact" className="onepage-section">
         <div className="section-head">
           <p className="eyebrow">{content.contactPage.eyebrow}</p>
           <h2 className="section-title">{content.contactPage.title}</h2>
