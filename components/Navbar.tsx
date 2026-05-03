@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useAppSettings, useLocaleContent } from '@/components/AppSettingsProvider'
 import { siteConfig } from '@/lib/data'
-import { Locale, ThemeMode } from '@/lib/content'
+import type { Locale, ThemeMode } from '@/lib/content'
 
 const navItems = [
   { label: 'Home', href: '/#home' },
@@ -17,79 +17,37 @@ const navItems = [
   { label: 'Contact', href: '/#contact' },
 ] as const
 
-const localeOrder: Locale[] = ['en', 'id', 'ar']
-
-const localeFlags: Record<Locale, string> = {
-  en: '🇺🇸',
-  id: '🇮🇩',
-  ar: '🇸🇦',
-}
-
+const localeOrder: Locale[] = ['en', 'ar', 'id']
+const localeFlags: Record<Locale, string> = { en: '🇺🇸', ar: '🇸🇦', id: '🇮🇩' }
 const themeOrder: ThemeMode[] = ['light', 'dark', 'system']
-
-const iconButtonStyle: React.CSSProperties = {
-  width: '34px',
-  height: '34px',
-  borderRadius: '999px',
-  border: '1px solid var(--border)',
-  background: 'var(--bg)',
-  color: 'var(--text-muted)',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  cursor: 'pointer',
-}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const { locale, setLocale, themeMode, setThemeMode } = useAppSettings()
   const content = useLocaleContent()
-  const nextLocale = localeOrder[(localeOrder.indexOf(locale) + 1) % localeOrder.length]
-  const nextTheme = themeOrder[(themeOrder.indexOf(themeMode) + 1) % themeOrder.length]
 
-  const handleLocaleCycle = () => setLocale(nextLocale)
-  const handleThemeCycle = () => setThemeMode(nextTheme)
+  const cycleLocale = () =>
+    setLocale(localeOrder[(localeOrder.indexOf(locale) + 1) % localeOrder.length])
+  const cycleTheme = () =>
+    setThemeMode(themeOrder[(themeOrder.indexOf(themeMode) + 1) % themeOrder.length])
+
+  const headerStyle: React.CSSProperties = {
+    background: 'color-mix(in srgb, var(--bg) 86%, transparent)',
+    borderColor: 'var(--border)',
+    boxShadow: 'var(--shadow-soft)',
+  }
 
   return (
     <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        background: 'color-mix(in srgb, var(--bg) 86%, transparent)',
-        backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid var(--border)',
-        boxShadow: 'var(--shadow-soft)',
-      }}
+      className="fixed inset-x-0 top-0 z-50 border-b backdrop-blur-md"
+      style={headerStyle}
     >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          padding: '0 clamp(1rem, 4vw, 2rem)',
-          height: '64px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-        }}
-      >
-        <Link href="/" style={{ textDecoration: 'none' }} aria-label={`${siteConfig.name} home`}>
+      <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link href="/" aria-label={`${siteConfig.name} home`} className="inline-flex items-center no-underline">
           <span
+            className="inline-flex h-9 w-9 items-center justify-center rounded-[10px] font-display text-[1.18rem] font-bold tracking-tight"
             style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '10px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.18rem',
-              fontWeight: 700,
               color: 'var(--brand)',
-              letterSpacing: '0.02em',
               background: 'var(--bg-card)',
               border: '1px solid var(--brand-soft)',
               boxShadow: '0 8px 20px rgba(0, 0, 0, 0.24)',
@@ -99,74 +57,49 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <nav style={{ display: 'flex', gap: 'clamp(1rem, 2.2vw, 1.5rem)' }} className="hidden-mobile">
+        <nav className="nav-links hidden items-center gap-5 lg:flex xl:gap-6">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.78rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--text-muted)',
-                textDecoration: 'none',
-                transition: 'color 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--brand)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+              className="nav-link font-mono text-[0.78rem] uppercase tracking-[0.08em] no-underline"
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden-mobile" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <button
-            type="button"
-            onClick={handleLocaleCycle}
-            style={iconButtonStyle}
-            aria-label={`${content.ui.language}: ${locale}`}
+        <div className="hidden items-center gap-2 lg:flex">
+          <IconButton
+            onClick={cycleLocale}
+            ariaLabel={`${content.ui.language}: ${locale}`}
             title={content.ui.language}
           >
-            <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>{localeFlags[locale]}</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleThemeCycle}
-            style={iconButtonStyle}
-            aria-label={`${content.ui.theme}: ${themeMode}`}
+            <span className="text-[1.05rem] leading-none">{localeFlags[locale]}</span>
+          </IconButton>
+          <IconButton
+            onClick={cycleTheme}
+            ariaLabel={`${content.ui.theme}: ${themeMode}`}
             title={content.ui.theme}
           >
-            <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M9 18h6M10 22h4M8 14.2A6.5 6.5 0 1 1 16 14.2c-.85.8-1.38 1.7-1.57 2.8h-4.86C9.38 15.9 8.85 15 8 14.2Z"
-                fill={themeMode === 'light' ? '#f59e0b' : 'none'}
-                stroke={themeMode === 'dark' ? '#60a5fa' : 'var(--text-muted)'}
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <ThemeIcon mode={themeMode} />
+          </IconButton>
         </div>
 
         <button
+          type="button"
           onClick={() => setOpen(!open)}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'none' }}
-          className="show-mobile"
+          aria-expanded={open}
           aria-label={open ? content.ui.closeMenuLabel : content.ui.menuLabel}
+          className="inline-flex h-9 w-9 items-center justify-center bg-transparent p-1 lg:hidden"
         >
-          <div style={{ width: '22px', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <span className="flex w-[22px] flex-col gap-[5px]">
             {[0, 1, 2].map((i) => (
               <span
                 key={i}
+                className="block h-[1.5px] rounded-[1px] transition-transform duration-300"
                 style={{
-                  display: 'block',
-                  height: '1.5px',
                   background: 'var(--brand)',
-                  borderRadius: '1px',
-                  transition: '0.3s',
                   transform: open
                     ? i === 0
                       ? 'rotate(45deg) translate(5px, 5px)'
@@ -177,77 +110,95 @@ export default function Navbar() {
                 }}
               />
             ))}
-          </div>
+          </span>
         </button>
       </div>
 
       {open && (
         <div
-          style={{
-            background: 'var(--bg)',
-            borderTop: '1px solid var(--border)',
-            padding: '1rem clamp(1rem, 4vw, 2rem) 1.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-          }}
+          className="flex flex-col gap-4 border-t px-4 py-5 lg:hidden"
+          style={{ background: 'var(--bg)', borderColor: 'var(--border)' }}
         >
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.85rem',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: 'var(--text-muted)',
-                textDecoration: 'none',
-              }}
+              className="nav-link font-mono text-[0.85rem] uppercase tracking-[0.08em] no-underline"
             >
               {item.label}
             </Link>
           ))}
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.25rem' }}>
-            <button
-              type="button"
-              onClick={handleLocaleCycle}
-              style={iconButtonStyle}
-              aria-label={`${content.ui.language}: ${locale}`}
-            >
-              <span style={{ fontSize: '1.05rem', lineHeight: 1 }}>{localeFlags[locale]}</span>
-            </button>
-            <button
-              type="button"
-              onClick={handleThemeCycle}
-              style={iconButtonStyle}
-              aria-label={`${content.ui.theme}: ${themeMode}`}
-            >
-              <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M9 18h6M10 22h4M8 14.2A6.5 6.5 0 1 1 16 14.2c-.85.8-1.38 1.7-1.57 2.8h-4.86C9.38 15.9 8.85 15 8 14.2Z"
-                  fill={themeMode === 'light' ? '#f59e0b' : 'none'}
-                  stroke={themeMode === 'dark' ? '#60a5fa' : 'var(--text-muted)'}
-                  strokeWidth="1.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+          <div className="mt-1 flex gap-3">
+            <IconButton onClick={cycleLocale} ariaLabel={`${content.ui.language}: ${locale}`}>
+              <span className="text-[1.05rem] leading-none">{localeFlags[locale]}</span>
+            </IconButton>
+            <IconButton onClick={cycleTheme} ariaLabel={`${content.ui.theme}: ${themeMode}`}>
+              <ThemeIcon mode={themeMode} />
+            </IconButton>
           </div>
         </div>
       )}
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
+      <style jsx global>{`
+        .nav-link {
+          color: var(--text-muted);
+          transition: color 0.2s ease;
         }
-        @media (min-width: 1025px) {
-          .show-mobile { display: none !important; }
+        .nav-link:hover {
+          color: var(--brand);
+        }
+        .icon-btn {
+          color: var(--text-muted);
+          background: var(--bg);
+          border: 1px solid var(--border);
+          transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .icon-btn:hover {
+          border-color: var(--brand);
+          color: var(--brand);
         }
       `}</style>
     </header>
+  )
+}
+
+function IconButton({
+  children,
+  onClick,
+  ariaLabel,
+  title,
+}: {
+  children: React.ReactNode
+  onClick: () => void
+  ariaLabel: string
+  title?: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={ariaLabel}
+      title={title}
+      className="icon-btn inline-flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-full"
+    >
+      {children}
+    </button>
+  )
+}
+
+function ThemeIcon({ mode }: { mode: ThemeMode }) {
+  const isLight = mode === 'light'
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M9 18h6M10 22h4M8 14.2A6.5 6.5 0 1 1 16 14.2c-.85.8-1.38 1.7-1.57 2.8h-4.86C9.38 15.9 8.85 15 8 14.2Z"
+        fill={isLight ? '#f59e0b' : 'none'}
+        stroke={mode === 'dark' ? 'var(--brand)' : 'currentColor'}
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }
